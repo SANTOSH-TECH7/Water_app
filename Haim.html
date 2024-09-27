@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 3D SVG Animation with Text</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e); /* Bluish neon background */
+            color: white;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .svg-frame {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px; /* Reduced space between logo and writings */
+        }
+
+        .svg-frame svg {
+            position: absolute;
+            transition: .5s;
+            z-index: calc(1 - (0.2 * var(--j)));
+            transform-origin: center;
+            width: 344px;
+            height: 344px;
+            fill: none;
+        }
+
+        .svg-frame:hover svg {
+            transform: rotate(-80deg) skew(30deg) translateX(calc(45px * var(--i))) translateY(calc(-35px * var(--i)));
+        }
+
+        .svg-frame svg #center {
+            transition: .5s;
+            transform-origin: center;
+        }
+
+        .svg-frame:hover svg #center {
+            transform: rotate(-30deg) translateX(45px) translateY(-3px);
+        }
+
+        #out2 {
+            animation: rotate16 7s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+
+        #out3 {
+            animation: rotate16 3s ease-in-out infinite alternate;
+            transform-origin: center;
+            stroke: rgb(251, 255, 37);
+            filter: drop-shadow(0 0 5px #ff0); /* Glow effect */
+        }
+
+        @keyframes rotate16 {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Buttons layout */
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around; /* Evenly distribute icons */
+            width: 600px; /* Adjust width to fit all icons */
+            margin-top: 20px; /* Added margin to ensure proper spacing */
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 10px; /* Space between icons */
+        }
+
+        .option:hover {
+            transform: scale(1.1);
+            background-color: rgba(0, 255, 255, 0.2);
+        }
+
+        .option img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .option p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Text animation */
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px; /* Space between logo and text */
+        }
+
+        .scanner {
+            display: inline-block;
+            font-size: 1.4rem;
+            color: transparent;
+            position: relative;
+        }
+
+        .scanner span {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scanner span::before {
+            content: "TEAM_QUANTUM...";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            border-right: 4px solid #eeefe9;
+            overflow: hidden;
+            color: #17FEFF;
+            animation: typing 4s steps(13) infinite;
+        }
+
+        @keyframes typing {
+            0% {
+                width: 0;
+            }
+            50% {
+                width: 100%;
+            }
+            100% {
+                width: 0;
+            }
+        }
+
+        /* Quote text */
+        .text {
+            color: #17FEFF;
+            font-size: 1.2rem;
+            margin-top: 10px; /* Space between the two animated texts */
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #fff;
+            box-sizing: border-box;
+            animation: typing-quote 6s steps(100) infinite;
+        }
+
+        @keyframes typing-quote {
+            0% {
+                width: 0;
+            }
+            50% {
+                width: 100%;
+            }
+            100% {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main logo in the center -->
+    <div class="svg-frame">
+        <svg viewBox="0 0 100 100" style="--i:1; --j:1;">
+            <circle id="out2" cx="50" cy="50" r="40" stroke="cyan" stroke-width="3" />
+            <circle id="out3" cx="50" cy="50" r="30" stroke="magenta" stroke-width="3" />
+            <circle id="inner3" cx="50" cy="50" r="20" stroke="yellow" stroke-width="3" />
+            <circle id="inner1" cx="50" cy="50" r="10" stroke="#4A148C" stroke-width="3" />
+            <circle id="center" cx="50" cy="50" r="5" fill="yellow" />
+        </svg>
+    </div>
+
+    <!-- Text animation below the logo -->
+    <div class="loader">
+        <div class="scanner">
+            <span>TEAM_QUANTUM...</span>
+        </div>
+    </div>
+    
+    <!-- Quote text below the scanner animation -->
+    <div class="text">If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success. -James Cameron...</div>
+
+    <!-- Buttons below the text animation -->
+    <div class="button-container">
+        <div class="option" onclick="location.href='index.html'">
+            <img src="C:/Users/R.SANTOSH/Downloads/trans_wtf.jpg" alt="Virtual Footprint">
+            <p>Virtual Footprint</p>
+        </div>
+        <div class="option" onclick="location.href='index2.html'">
+            <img src="C:/Users/R.SANTOSH/Downloads/cropwtf.jpeg" alt="Crop Analysis">
+            <p>Crop Analysis</p>
+        </div>
+        <!-- New Icon for Diet Plan Analyzer -->
+        <div class="option" onclick="location.href='C:/Users/R.SANTOSH/Desktop/Water_footprint/index2.html'">
+            <img src="C:/Users/R.SANTOSH/Downloads/diet.jpg" alt="Diet Plan Analyzer">
+            <p>Diet Plan Analyzer</p>
+        </div>
+        <!-- New Icon for Dishes Water Footprint -->
+        <div class="option" onclick="location.href='C:/Users/R.SANTOSH/Desktop/Water_footprint/index4.html'">
+            <img src="C:/Users/R.SANTOSH/Downloads/dishes.jpeg" alt="Dishes Water Footprint">
+            <p>Dishes Water Footprint</p>
+        </div>
+    </div>
+
+</body>
+</html>
