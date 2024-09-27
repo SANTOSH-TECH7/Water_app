@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Water Footprint</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* Light cyan background */
+            padding: 20px;
+            transition: background-color 0.5s; /* Smooth background transition */
+        }
+        h1 {
+            color: #00695c; /* Darker teal */
+            text-align: center;
+            animation: fadeIn 1s; /* Animation on heading */
+        }
+        select, button {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #00695c; /* Border color */
+            transition: background-color 0.3s, transform 0.3s; /* Button animations */
+        }
+        select:hover, button:hover {
+            background-color: #b2dfdb; /* Light teal on hover */
+            transform: scale(1.05); /* Scale effect */
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #00695c;
+            background-color: #ffffff; /* White background for results */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            animation: fadeIn 1s; /* Animation for results */
+        }
+        .chart-container {
+            position: relative;
+            height: 400px; /* Set a fixed height for the chart */
+            width: 400px; /* Set a fixed width for the chart */
+            margin: 20px auto; /* Center the chart */
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Select Crop to Get Water Footprint Details</h1>
+
+    <label for="cropSelect">Choose a crop:</label>
+    <select id="cropSelect">
+        <option value="Rice">Rice</option>
+        <option value="Cotton">Cotton</option>
+        <!-- Add more options dynamically as needed -->
+    </select>
+
+    <button onclick="getFootprint()">Get Water Footprint</button>
+
+    <div id="result" class="result">
+        <p><strong>Water Footprint:</strong> <span id="waterFootprint">N/A</span></p>
+        <p><strong>Virtual Water Exported:</strong> <span id="virtualWater">N/A</span></p>
+        <p><strong>Annual Export (tons):</strong> <span id="annualExport">N/A</span></p>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="waterFootprintChart"></canvas>
+    </div>
+
+    <script>
+        // Data from the Excel file
+        const cropData = {
+            'Rice': {
+                waterFootprint: 3500,
+                virtualWater: 112000000000,
+                annualExport: 37400000
+            },
+            'Cotton': {
+                waterFootprint: 20000,
+                virtualWater: 110000000000,
+                annualExport: 5500000
+            }
+            // Add more crops as needed
+        };
+
+        const ctx = document.getElementById('waterFootprintChart').getContext('2d');
+        let waterFootprintChart;
+
+        function getFootprint() {
+            const crop = document.getElementById("cropSelect").value;
+            const data = cropData[crop];
+
+            if (data) {
+                document.getElementById("waterFootprint").textContent = data.waterFootprint + " liters/kg";
+                document.getElementById("virtualWater").textContent = data.virtualWater + " m³";
+                document.getElementById("annualExport").textContent = data.annualExport + " tons";
+
+                // Update chart
+                updateChart(data);
+            }
+        }
+
+        function updateChart(data) {
+            const waterFootprint = data.waterFootprint;
+            const virtualWater = data.virtualWater / 1000000; // Convert to million cubic meters for better visualization
+            const annualExport = data.annualExport / 1000; // Convert to thousand tons
+
+            // Destroy the existing chart if it exists
+            if (waterFootprintChart) {
+                waterFootprintChart.destroy();
+            }
+
+            // Create a new pie chart with different vibrant colors
+            waterFootprintChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Water Footprint (L/kg)', 'Virtual Water Export (M³)', 'Annual Export (Tons)'],
+                    datasets: [{
+                        label: 'Water Data',
+                        data: [waterFootprint, virtualWater, annualExport],
+                        backgroundColor: [
+                            'rgba(255, 45, 85, 0.7)',  // Bright red
+                            'rgba(0, 204, 255, 0.7)',  // Bright cyan
+                            'rgba(255, 165, 0, 0.7)',   // Bright orange
+                            'rgba(51, 204, 51, 0.7)',   // Bright green
+                            'rgba(153, 51, 255, 0.7)'   // Bright purple
+                        ],
+                        borderColor: [
+                            'rgba(255, 45, 85, 1)',
+                            'rgba(0, 204, 255, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(51, 204, 51, 1)',
+                            'rgba(153, 51, 255, 1)'
+                        ],
+                        borderWidth: 2 // Border width for pie slices
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: {
+                        animateRotate: true, // Rotate animation
+                        animateScale: true, // Scale animation
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Crop Water Footprint and Exports'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    .loader {
+      width: 100vw;
+     
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .truckWrapper {
+      width: 200px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      align-items: center;
+      justify-content: flex-end;
+      overflow-x: hidden;
+      animation: moveTruck 5s linear infinite;
+    }
+
+    /* Animation to move the truck across the page */
+    @keyframes moveTruck {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(100vw);
+      }
+    }
+
+    /* truck upper body */
+    .truckBody {
+      width: 130px;
+      height: fit-content;
+      margin-bottom: 6px;
+      position: relative;
+      animation: motion 1s linear infinite;
+    }
+
+    /* Add text inside truck */
+    .truckText {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      color: #282828;
+    }
+
+    /* truck suspension animation */
+    @keyframes motion {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(3px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    /* truck's tires */
+    .truckTires {
+      width: 130px;
+      height: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0px 10px 0px 15px;
+      position: absolute;
+      bottom: 0;
+    }
+
+    .truckTires svg {
+      width: 24px;
+    }
+
+    .road {
+      width: 100%;
+      height: 1.5px;
+      background-color: #282828;
+      position: relative;
+      bottom: 0;
+      align-self: flex-end;
+      border-radius: 3px;
+    }
+
+    .road::before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 100%;
+      background-color: #282828;
+      right: -50%;
+      border-radius: 3px;
+      animation: roadAnimation 1.4s linear infinite;
+      border-left: 10px solid white;
+    }
+
+    .road::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 100%;
+      background-color: #282828;
+      right: -65%;
+      border-radius: 3px;
+      animation: roadAnimation 1.4s linear infinite;
+      border-left: 4px solid white;
+    }
+
+    @keyframes roadAnimation {
+      0% {
+        transform: translateX(0px);
+      }
+      100% {
+        transform: translateX(-350px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div class="truckWrapper">
+      <div class="truckBody">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 198 93"
+          class="trucksvg"
+        >
+          <path
+            stroke-width="3"
+            stroke="#282828"
+            fill="#F83D3D"
+            d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"
+          ></path>
+          <path
+            stroke-width="3"
+            stroke="#282828"
+            fill="#7D7C7C"
+            d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z"
+          ></path>
+          <path
+            stroke-width="2"
+            stroke="#282828"
+            fill="#282828"
+            d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z"
+          ></path>
+          <rect
+            stroke-width="2"
+            stroke="#282828"
+            fill="#FFFCAB"
+            rx="1"
+            height="7"
+            width="5"
+            y="63"
+            x="187"
+          ></rect>
+          <rect
+            stroke-width="2"
+            stroke="#282828"
+            fill="#282828"
+            rx="1"
+            height="11"
+            width="4"
+            y="81"
+            x="193"
+          ></rect>
+          <rect
+            stroke-width="3"
+            stroke="#282828"
+            fill="#DFDFDF"
+            rx="2.5"
+            height="90"
+            width="121"
+            y="1.5"
+            x="6.5"
+          ></rect>
+          <rect
+            stroke-width="2"
+            stroke="#282828"
+            fill="#DFDFDF"
+            rx="2"
+            height="4"
+            width="6"
+            y="84"
+            x="1"
+          ></rect>
+        </svg>
+        <div class="truckText">VIRTUAL<br>WATER</div>
+
+      </div>
+      <div class="truckTires">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 30 30"
+          class="tiresvg"
+        >
+          <circle
+            stroke-width="3"
+            stroke="#282828"
+            fill="#282828"
+            r="13.5"
+            cy="15"
+            cx="15"
+          ></circle>
+          <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 30 30"
+          class="tiresvg"
+        >
+          <circle
+            stroke-width="3"
+            stroke="#282828"
+            fill="#282828"
+            r="13.5"
+            cy="15"
+            cx="15"
+          ></circle>
+          <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+        </svg>
+      </div>
+      <div class="road"></div>
+    </div>
+  </div>
+</body>
+</html>

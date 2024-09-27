@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Rising Animation with Waves and Bubbles</title>
+    <style>
+        /* Body styling with white background */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            overflow: hidden; /* Prevent default body scroll */
+            position: relative;
+        }
+
+        /* Waving water level animation with more wavy effects */
+        .water-rising {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(135deg, rgba(128, 255, 251, 0.8), rgba(76, 120, 203, 0.8));
+            opacity: 0.9;
+            animation: wave 8s infinite ease-in-out;
+            z-index: 1; /* Ensure it appears behind the boxes */
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 0;
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                height: 40%;
+                transform: translateY(-5%) translateX(-3%) rotate(-2deg);
+            }
+            50% {
+                height: 60%;
+                transform: translateY(-10%) translateX(3%) rotate(2deg);
+            }
+            75% {
+                height: 50%;
+                transform: translateY(-7%) translateX(-2%) rotate(-1deg);
+            }
+        }
+
+        /* Bubble effects */
+        .bubble {
+            position: absolute;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+            z-index: 1;
+        }
+
+        /* Different sizes for bubbles */
+        .bubble.small {
+            width: 10px;
+            height: 10px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+
+        .bubble.medium {
+            width: 15px;
+            height: 15px;
+            left: 50%;
+            animation-duration: 10s;
+        }
+
+        .bubble.large {
+            width: 20px;
+            height: 20px;
+            left: 80%;
+            animation-duration: 12s;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: 0;
+                transform: translateX(0);
+                opacity: 0;
+            }
+            25% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateX(-5px);
+            }
+            100% {
+                bottom: 100%;
+                transform: translateX(10px);
+                opacity: 0;
+            }
+        }
+
+        /* Container for the boxes with scrolling enabled */
+        .scroll-container {
+            height: 100vh; /* Full viewport height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2; /* Ensure it appears above the water */
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 columns for 36 boxes */
+            grid-gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Styling individual boxes */
+        .box {
+            background:  linear-gradient(0deg, rgb(223, 220, 223) 18%, rgba(253,187,45,1) 100%);
+            border-radius: 10px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease;
+            animation-delay: calc(0.1s * var(--box-index)); /* Delayed animation for each box */
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .box a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: repeat(4, 1fr); /* Adjust to 4 columns for smaller screens */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for small screens */
+            }
+        }
+
+        @media (max-width: 400px) {
+            .grid-container {
+                grid-template-columns: 1fr; /* Single column for very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-rising"></div>
+
+    <!-- Bubbles -->
+    <div class="bubble small"></div>
+    <div class="bubble medium"></div>
+    <div class="bubble large"></div>
+
+    <div class="scroll-container">
+        <h2 style="text-align: center; color: #333; padding-top: 20px;">Explore the Water Footprint of Famous Dishes</h2>
+        <div class="grid-container">
+            <!-- Create exactly 36 boxes with clickable links -->
+            <div class="box" style="--box-index: 1;"><a href="https://m-sivaraj-teamquantum.github.io/andhrapradsh/">ANDHRA PRADESH</a></div>
+            <div class="box" style="--box-index: 2;"><a href="https://m-sivaraj-teamquantum.github.io/arunachal-pradesh/">ARUNACHAL PRADESH</a></div>
+            <div class="box" style="--box-index: 3;"><a href="https://m-sivaraj-teamquantum.github.io/assam/">ASSAM</a></div>
+            <div class="box" style="--box-index: 4;"><a href="https://m-sivaraj-teamquantum.github.io/bihar/">BIHAR</a></div>
+            <div class="box" style="--box-index: 5;"><a href=" https://m-sivaraj-teamquantum.github.io/chattisgarh/">CHHATTISGARH</a></div>
+            <div class="box" style="--box-index: 6;"><a href="https://m-sivaraj-teamquantum.github.io/goa/">GOA</a></div>
+            <div class="box" style="--box-index: 7;"><a href="https://m-sivaraj-teamquantum.github.io/gujarat/">GUJARAT</a></div>
+            <div class="box" style="--box-index: 8;"><a href=" https://m-sivaraj-teamquantum.github.io/haryana/">HARYANA</a></div>
+            <div class="box" style="--box-index: 9;"><a href=" https://m-sivaraj-teamquantum.github.io/Himachal-Pradesh-new/">HIMACHAL PRADESH</a></div>
+            <div class="box" style="--box-index: 10;"><a href="https://m-sivaraj-teamquantum.github.io/jharkhand/">JHARKHAND</a></div>
+            <div class="box" style="--box-index: 11;"><a href=" https://m-sivaraj-teamquantum.github.io/karnataka/">KARNATAKA</a></div>
+            <div class="box" style="--box-index: 12;"><a href="https://m-sivaraj-teamquantum.github.io/kerala/">KERLA</a></div>
+            <div class="box" style="--box-index: 13;"><a href=" https://m-sivaraj-teamquantum.github.io/mp/">MADHYA PRADESH</a></div>
+            <div class="box" style="--box-index: 14;"><a href="https://m-sivaraj-teamquantum.github.io/maharastra/">MAHARASHTRA</a></div>
+            <div class="box" style="--box-index: 15;"><a href="https://m-sivaraj-teamquantum.github.io/manipur/">MANIPUR</a></div>
+            <div class="box" style="--box-index: 16;"><a href="https://m-sivaraj-teamquantum.github.io/megalaya/">MEGHALAYA</a></div>
+            <div class="box" style="--box-index: 17;"><a href="https://m-sivaraj-teamquantum.github.io/mizoram-/">Mizoram</a></div>
+            <div class="box" style="--box-index: 18;"><a href="https://m-sivaraj-teamquantum.github.io/nagaland-1/">NAGALAND</a></div>
+            <div class="box" style="--box-index: 19;"><a href=" https://m-sivaraj-teamquantum.github.io/odisha/">ODISHA</a></div>
+            <div class="box" style="--box-index: 20;"><a href=" https://m-sivaraj-teamquantum.github.io/pujab-new/">PUNJAB</a></div>
+            <div class="box" style="--box-index: 21;"><a href="https://m-sivaraj-teamquantum.github.io/rajasthan/">RAJASTHAN</a></div>
+            <div class="box" style="--box-index: 22;"><a href="https://m-sivaraj-teamquantum.github.io/sikkim/">SIKKIM</a></div>
+            <div class="box" style="--box-index: 23;"><a href="https://m-sivaraj-teamquantum.github.io/tamilnadu/">TAMILNADU</a></div>
+            <div class="box" style="--box-index: 24;"><a href=" https://m-sivaraj-teamquantum.github.io/telangana-1/">TELANGANA</a></div>
+            <div class="box" style="--box-index: 25;"><a href="https://m-sivaraj-teamquantum.github.io/tirpur/">TRIPURA</a></div>
+            <div class="box" style="--box-index: 26;"><a href=" https://m-sivaraj-teamquantum.github.io/uttar-pradesh/">UTTAR PRADESH</a></div>
+            <div class="box" style="--box-index: 27;"><a href="https://m-sivaraj-teamquantum.github.io/uttarkhand/">UTTARAKHAND</a></div>
+            <div class="box" style="--box-index: 28;"><a href="https://m-sivaraj-teamquantum.github.io/west-bengal/">WEST BENGAL</a></div>
+            <div class="box" style="--box-index: 29;"><a href=" https://m-sivaraj-teamquantum.github.io/andaman-and-nicobar-1-/">UT - ANDAMAN AND NICOBAR ISLANDS</a></div>
+            <div class="box" style="--box-index: 30;"><a href=" https://m-sivaraj-teamquantum.github.io/Chandigarh/">UT - CHANDIGARH</a></div>
+            <div class="box" style="--box-index: 31;"><a href=" https://m-sivaraj-teamquantum.github.io/Dadra-and-Nagar-Haveli-ut-/">UT - DADRA AND NAGAR HAVELI AND DAMAN AND DIU</a></div>
+            <div class="box" style="--box-index: 32;"><a href=" https://m-sivaraj-teamquantum.github.io/Lakshadeep/">UT - LAKSHADWEEP</a></div>
+            <div class="box" style="--box-index: 33;"><a href=" https://m-sivaraj-teamquantum.github.io/delhi-ut-/">UT - DELHI</a></div>
+            <div class="box" style="--box-index: 34;"><a href="https://m-sivaraj-teamquantum.github.io/Puducherry-ut-/">UT - PUDUCHERRY</a></div>
+            <div class="box" style="--box-index: 35;"><a href=" https://m-sivaraj-teamquantum.github.io/ladakh/">UT - LADAKH</a></div>
+            <div class="box" style="--box-index: 36;"><a href=" https://m-sivaraj-teamquantum.github.io/kasmir-new/">UT - JAMMU AND KASHMIR</a></div>
+        </div>
+    </div>
+</body>
+</html>
